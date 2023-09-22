@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.BookDto;
 import mate.academy.dto.CreateBookRequestDto;
+import mate.academy.exception.EntityNotFoundException;
 import mate.academy.mapper.BookMapper;
 import mate.academy.model.Book;
 import mate.academy.repository.BookRepository;
@@ -36,5 +37,21 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll().stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public void deletedById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    @Override
+    public BookDto updateById(Long id, CreateBookRequestDto requestDto) {
+        if (bookRepository.findById(id).isPresent()) {
+            Book book = bookMapper.toModel(requestDto);
+            book.setId(id);
+            return bookMapper.toDto(bookRepository.save(book));
+        }
+        throw new EntityNotFoundException("Book with id " + id
+                + " is absent in DB");
     }
 }
