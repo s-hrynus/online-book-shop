@@ -20,18 +20,19 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "title")
+    @Column(nullable = false, name = "title")
     private String title;
-    @Column(name = "author")
+    @Column(nullable = false, name = "author")
     private String author;
-    @Column(unique = true, name = "isbn")
+    @Column(nullable = false, unique = true, name = "isbn")
     private String isbn;
-    @Column(name = "price")
+    @Column(nullable = false, name = "price")
     private BigDecimal price;
     @Column(name = "description")
     private String description;
     @Column(name = "cover_image")
     private String coverImage;
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 }
+
