@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-books-into-table
+      author: shr
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "First Book" }
+              - column: { name: author, value: "Author A" }
+              - column: { name: isbn, value: "111-111-111" }
+              - column: { name: price, value: '11.99'}
+              - column: { name: description, value: "Awesome book" }
+              - column: { name: cover_image, value: "http://example.com/cover1.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Second Book" }
+              - column: { name: author, value: "Author B" }
+              - column: { name: isbn, value: "222-222-222" }
+              - column: { name: price, value: '12.99' }
+              - column: { name: description, value: "Awesome book" }
+              - column: { name: cover_image, value: "http://example.com/cover2.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Third Book" }
+              - column: { name: author, value: "Author C" }
+              - column: { name: isbn, value: "333-333-333" }
+              - column: { name: price, value: '13.99' }
+              - column: { name: description, value: "Awesome book" }
+              - column: { name: cover_image, value: "http://example.com/cover3.jpg" }
