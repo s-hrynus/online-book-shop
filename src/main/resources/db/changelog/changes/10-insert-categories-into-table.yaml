@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-categories-into-table
+      author: shr
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "horror"}
+              - column: { name: description, value: "book with mystery plot"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "historical"}
+              - column: { name: description, value: "book based on true facts"}
+        - insert:
+            tableName: categories
+            columns:
+              - column: { name: name, value: "crime" }
+              - column: { name: description, value: "book with unpredictable plot" }
