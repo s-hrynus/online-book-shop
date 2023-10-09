@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.book.BookDto;
+import mate.academy.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.dto.book.BookSearchParameters;
 import mate.academy.dto.book.CreateBookRequestDto;
 import mate.academy.exception.EntityNotFoundException;
@@ -66,6 +67,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(bookSpecification)
                 .stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long id) {
+        List<Book> booksByCategory = bookRepository.findAllByCategoryId(id);
+        return booksByCategory.stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 }
