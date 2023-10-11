@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "bob@in.ua" }
-              - column: { name: password, value: "$2a$04$bN0yiHqbbArcBQPuTpBG5uuhrg67cQ1GSiTshIh4SueuuIAqtmP9q" }
+              - column: { name: password, value: "$2a$12$tKEKmqcmewUABf/4aE7sAeH2TefHZOHWaBUxYz9N8tG679nFlBIBW" }
               - column: { name: first_name, value: "Bob" }
               - column: { name: last_name, value: "Alison" }
               - column: { name: shipping_address, value: "USA" }
@@ -15,7 +15,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "jane@in.ua" }
-              - column: { name: password, value: "$2a$04$bN0yiHqbbArcBQPuTpBG5uuhrg67cQ1GSiTshIh4SueuuIAqtmP9q" }
+              - column: { name: password, value: "$2a$12$tKEKmqcmewUABf/4aE7sAeH2TefHZOHWaBUxYz9N8tG679nFlBIBW" }
               - column: { name: first_name, value: "Jane" }
               - column: { name: last_name, value: "Jackson" }
               - column: { name: shipping_address, value: "China" }
@@ -23,7 +23,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: email, value: "john@in.ua" }
-              - column: { name: password, value: "$2a$04$bN0yiHqbbArcBQPuTpBG5uuhrg67cQ1GSiTshIh4SueuuIAqtmP9q" }
+              - column: { name: password, value: "$2a$12$tKEKmqcmewUABf/4aE7sAeH2TefHZOHWaBUxYz9N8tG679nFlBIBW" }
               - column: { name: first_name, value: "John" }
               - column: { name: last_name, value: "Wilson" }
               - column: { name: shipping_address, value: "England" }
