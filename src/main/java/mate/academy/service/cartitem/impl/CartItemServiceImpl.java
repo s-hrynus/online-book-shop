@@ -9,6 +9,7 @@ import mate.academy.model.CartItem;
 import mate.academy.repository.cartitem.CartItemRepository;
 import mate.academy.service.cartitem.CartItemService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -16,6 +17,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final CartItemMapper cartItemMapper;
 
+    @Transactional
     @Override
     public CartItemResponseDto updateByCartItemId(Long cartItemId,
                                                   UpdateRequestDto updateRequestDto) {
