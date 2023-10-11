@@ -18,6 +18,7 @@ import mate.academy.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.service.shoppingcart.ShoppingCartService;
 import mate.academy.service.user.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,11 +30,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemMapper cartItemMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto getAll() {
         return shoppingCartMapper.toDto(currentUserCart());
     }
 
+    @Transactional
     @Override
     public CartItemResponseDto addCartItem(CartItemRequestDto cartItemRequestDto) {
         ShoppingCart shoppingCart = currentUserCart();
@@ -57,6 +60,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private ShoppingCart currentUserCart() {
         User user = userService.getAuthenticatedUser();
-        return shoppingCartRepository.findShoppingCartByUserId(user.getId());
+        return shoppingCartRepository.findShoppingCartByUserEmail(user.getEmail()).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user with email " + user.getEmail()
+                        + " in DB"));
     }
 }

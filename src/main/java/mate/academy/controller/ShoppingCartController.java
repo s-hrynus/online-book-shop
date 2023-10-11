@@ -1,5 +1,6 @@
 package mate.academy.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import mate.academy.dto.cartitem.UpdateRequestDto;
 import mate.academy.dto.shoppingcart.ShoppingCartDto;
 import mate.academy.service.cartitem.CartItemService;
 import mate.academy.service.shoppingcart.ShoppingCartService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,23 +28,31 @@ public class ShoppingCartController {
     private final CartItemService cartItemService;
     private final ShoppingCartService shoppingCartService;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
+    @Operation(summary = "Get shopping cart with items by user")
     public ShoppingCartDto getAll() {
         return shoppingCartService.getAll();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
+    @Operation(summary = "Add cart item to the shopping cart")
     public CartItemResponseDto addCartItem(@RequestBody @Valid CartItemRequestDto requestDto) {
         return shoppingCartService.addCartItem(requestDto);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/cart-items/{cartItemId}")
+    @Operation(summary = "Update quantity of cart item by cart item id")
     public CartItemResponseDto update(@PathVariable Long cartItemId,
                                       @RequestBody @Valid UpdateRequestDto updateRequestDto) {
         return cartItemService.updateByCartItemId(cartItemId, updateRequestDto);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/cart-items/{cartItemId}")
+    @Operation(summary = "Delete cart items by cart item id")
     public void delete(@PathVariable Long cartItemId) {
         cartItemService.deleteById(cartItemId);
     }
