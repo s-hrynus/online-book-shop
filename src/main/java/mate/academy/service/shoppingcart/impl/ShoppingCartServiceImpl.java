@@ -17,6 +17,7 @@ import mate.academy.repository.cartitem.CartItemRepository;
 import mate.academy.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.service.shoppingcart.ShoppingCartService;
 import mate.academy.service.user.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +34,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto getAll() {
-        return shoppingCartMapper.toDto(currentUserCart());
+        return shoppingCartMapper.toDto(getCurrentUserCart());
     }
 
     @Transactional
     @Override
     public CartItemResponseDto addCartItem(CartItemRequestDto cartItemRequestDto) {
-        ShoppingCart shoppingCart = currentUserCart();
+        ShoppingCart shoppingCart = getCurrentUserCart();
         Book book = bookRepository.findById(cartItemRequestDto.bookId()).orElseThrow(
                 () -> new EntityNotFoundException("Can' find book by id "
                         + cartItemRequestDto.bookId()));
@@ -58,10 +59,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
 
-    private ShoppingCart currentUserCart() {
-        User user = userService.getAuthenticatedUser();
-        return shoppingCartRepository.findShoppingCartByUserEmail(user.getEmail()).orElseThrow(
-                () -> new EntityNotFoundException("Can't find user with email " + user.getEmail()
-                        + " in DB"));
+    @Override
+    public ShoppingCart getCurrentUserCart() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUserId(user.getId());
+        shoppingCart.setCartItems(
+                cartItemRepository.getCartItemsByShoppingCartId(shoppingCart.getId()));
+        return shoppingCart;
     }
 }

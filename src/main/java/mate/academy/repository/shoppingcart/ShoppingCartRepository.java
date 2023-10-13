@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart,
         Long>, JpaSpecificationExecutor<ShoppingCart> {
     Optional<ShoppingCart> findShoppingCartByUserEmail(String email);
+
+    ShoppingCart findShoppingCartByUserId(Long id);
 }
