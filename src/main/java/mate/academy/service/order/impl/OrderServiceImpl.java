@@ -14,6 +14,7 @@ import mate.academy.dto.orderitem.OrderItemDto;
 import mate.academy.exception.EntityNotFoundException;
 import mate.academy.mapper.OrderItemMapper;
 import mate.academy.mapper.OrderMapper;
+import mate.academy.model.CartItem;
 import mate.academy.model.Order;
 import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
@@ -35,11 +36,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
     private final OrderMapper orderMapper;
 
+    @Transactional
     @Override
     public List<OrderDto> getAllOrder() {
         User user = userService.getAuthenticatedUser();
-        return orderRepository.getOrderByUserId(user.getId()).stream()
-                .map(orderMapper::toDto)
+        List<Order> orders = orderRepository.getOrderByUserId(user.getId());
+        for (Order order : orders) {
+            order.setOrderItems(orderItemRepository.getAllByOrderId(order.getId()));
+        }
+        return orders.stream()
+                .map(this::initializeOrderItems)
                 .toList();
     }
 
@@ -51,12 +57,13 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(order);
     }
 
+    @Transactional
     @Override
     public OrderDto updateStatus(Long id, OrderStatusDto orderStatusDto) {
-        Order order = orderRepository.getOrderByIdAndUserId(id,
-                userService.getAuthenticatedUser().getId());
+        Order order = orderRepository.findOrderById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find order with id " + id));
         order.setStatus(orderStatusDto.status());
-        return orderMapper.toDto(order);
+        return initializeOrderItems(orderRepository.save(order));
     }
 
     @Transactional(readOnly = true)
@@ -84,18 +91,36 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingAddress(requestAddressDto.getShippingAddress());
         order.setUser(userService.getAuthenticatedUser());
         order.setTotal(shoppingCart.getCartItems().stream()
-                .map(i -> i.getBook().getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .map(this::calculateItemPrice)
                 .reduce(BigDecimal::add)
                 .orElseThrow());
+        Order savedOrder = orderRepository.save(order);
         order.setOrderItems(shoppingCart.getCartItems().stream()
-                .map(orderItemMapper::cartItemToOrderItem)
+                .map(i -> orderItemMapper.cartItemToOrderItem(i, savedOrder))
+                .map(orderItemRepository::save)
                 .collect(Collectors.toSet()));
-        return orderRepository.save(order);
+        return savedOrder;
     }
 
     private Stream<OrderItemDto> getAllOrderItemByOrderId(Long orderId) {
-        return orderRepository.getOrderByIdAndUserId(orderId, userService.getAuthenticatedUser()
-                .getId()).getOrderItems().stream()
+        return orderRepository.getOrderByUserId(userService.getAuthenticatedUser().getId())
+                .stream()
+                .filter(o -> o.getId().equals(orderId))
+                .findFirst().orElseThrow(
+                        () -> new EntityNotFoundException("Can't find order with id=" + orderId))
+                .getOrderItems().stream()
                 .map(orderItemMapper::toDto);
+    }
+
+    private OrderDto initializeOrderItems(Order order) {
+        OrderDto responseDto = orderMapper.toDto(order);
+        responseDto.setOrderItems(getAllOrderItemByOrderId(order.getId())
+                .collect(Collectors.toSet()));
+        return responseDto;
+    }
+
+    private BigDecimal calculateItemPrice(CartItem cartItem) {
+        return cartItem.getBook().getPrice()
+                .multiply(BigDecimal.valueOf(cartItem.getQuantity()));
     }
 }
