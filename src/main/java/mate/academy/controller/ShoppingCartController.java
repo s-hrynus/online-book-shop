@@ -8,7 +8,6 @@ import mate.academy.dto.cartitem.CartItemRequestDto;
 import mate.academy.dto.cartitem.CartItemResponseDto;
 import mate.academy.dto.cartitem.UpdateRequestDto;
 import mate.academy.dto.shoppingcart.ShoppingCartDto;
-import mate.academy.service.cartitem.CartItemService;
 import mate.academy.service.shoppingcart.ShoppingCartService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,14 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/cart")
 public class ShoppingCartController {
-    private final CartItemService cartItemService;
     private final ShoppingCartService shoppingCartService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
     @Operation(summary = "Get shopping cart with items by user")
     public ShoppingCartDto getAll() {
-        return shoppingCartService.getAll();
+        return shoppingCartService.getShoppingCart();
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -47,13 +45,13 @@ public class ShoppingCartController {
     @Operation(summary = "Update quantity of cart item by cart item id")
     public CartItemResponseDto update(@PathVariable Long cartItemId,
                                       @RequestBody @Valid UpdateRequestDto updateRequestDto) {
-        return cartItemService.updateByCartItemId(cartItemId, updateRequestDto);
+        return shoppingCartService.update(cartItemId, updateRequestDto);
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/cart-items/{cartItemId}")
     @Operation(summary = "Delete cart items by cart item id")
     public void delete(@PathVariable Long cartItemId) {
-        cartItemService.deleteById(cartItemId);
+        shoppingCartService.delete(cartItemId);
     }
 }
