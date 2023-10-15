@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users-into-table
+      author: shr
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "bob@in.ua" }
+              - column: { name: password, value: "$2a$12$tKEKmqcmewUABf/4aE7sAeH2TefHZOHWaBUxYz9N8tG679nFlBIBW" }
+              - column: { name: first_name, value: "Bob" }
+              - column: { name: last_name, value: "Alison" }
+              - column: { name: shipping_address, value: "USA" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "jane@in.ua" }
+              - column: { name: password, value: "$2a$12$tKEKmqcmewUABf/4aE7sAeH2TefHZOHWaBUxYz9N8tG679nFlBIBW" }
+              - column: { name: first_name, value: "Jane" }
+              - column: { name: last_name, value: "Jackson" }
+              - column: { name: shipping_address, value: "China" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "john@in.ua" }
+              - column: { name: password, value: "$2a$12$tKEKmqcmewUABf/4aE7sAeH2TefHZOHWaBUxYz9N8tG679nFlBIBW" }
+              - column: { name: first_name, value: "John" }
+              - column: { name: last_name, value: "Wilson" }
+              - column: { name: shipping_address, value: "England" }

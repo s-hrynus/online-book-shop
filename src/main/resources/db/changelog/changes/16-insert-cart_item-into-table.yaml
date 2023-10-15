@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-cart_item-into-table
+      author: shr
+      changes:
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: shopping_cart_id, value: '2' }
+              - column: { name: book_id, value: '1' }
+              - column: { name: quantity, value: '20' }
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: shopping_cart_id, value: '1' }
+              - column: { name: book_id, value: '2' }
+              - column: { name: quantity, value: '10' }
+        - insert:
+            tableName: cart_items
+            columns:
+              - column: { name: shopping_cart_id, value: '3' }
+              - column: { name: book_id, value: '3' }
+              - column: { name: quantity, value: '15' }
