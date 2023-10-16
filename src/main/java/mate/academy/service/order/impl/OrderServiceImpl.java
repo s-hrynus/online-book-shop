@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderItemDto findByIdOrderItem(Long orderId, Long itemId) {
         return getAllOrderItemByOrderId(orderId)
-                .filter(i -> i.getId().equals(itemId))
+                .filter(item -> item.getId().equals(itemId))
                 .findFirst().orElseThrow(
                         () -> new EntityNotFoundException("Can't find order item by id "
                                 + itemId));
@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
     private Stream<OrderItemDto> getAllOrderItemByOrderId(Long orderId) {
         return orderRepository.getOrderByUserId(userService.getAuthenticatedUser().getId())
                 .stream()
-                .filter(o -> o.getId().equals(orderId))
+                .filter(order -> order.getId().equals(orderId))
                 .findFirst().orElseThrow(
                         () -> new EntityNotFoundException("Can't find order with id=" + orderId))
                 .getOrderItems().stream()
