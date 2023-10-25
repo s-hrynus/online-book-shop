@@ -19,6 +19,14 @@ public interface OrderItemMapper {
     OrderItem cartItemToOrderItem(CartItem cartItem, Order order);
 
     @AfterMapping
+    default void initializeOrderInItem(@MappingTarget
+                                       OrderItem orderItem, CartItem cartItem, Order order) {
+        orderItem.setOrder(order);
+        orderItem.setBook(cartItem.getBook());
+        orderItem.setPrice(cartItem.getBook().getPrice());
+    }
+
+    @AfterMapping
     default void setBookId(@MappingTarget OrderItemDto orderItemDto, OrderItem orderItem) {
         orderItemDto.setBookId(orderItem.getBook().getId());
     }

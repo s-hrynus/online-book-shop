@@ -27,4 +27,14 @@ public interface BookMapper {
                 .collect(Collectors.toSet());
         bookDto.setCategoriesIds(categoriesIds);
     }
+
+    default Set<Category> mapToCategorySet(Set<Long> categoriesIds) {
+        return categoriesIds.stream()
+                .map(id -> {
+                    Category category = new Category();
+                    category.setId(id);
+                    return category;
+                })
+                .collect(Collectors.toSet());
+    }
 }

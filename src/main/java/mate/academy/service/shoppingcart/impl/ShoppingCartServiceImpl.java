@@ -17,7 +17,9 @@ import mate.academy.model.User;
 import mate.academy.repository.book.BookRepository;
 import mate.academy.repository.cartitem.CartItemRepository;
 import mate.academy.repository.shoppingcart.ShoppingCartRepository;
+import mate.academy.repository.user.UserRepository;
 import mate.academy.service.shoppingcart.ShoppingCartService;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +29,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemMapper cartItemMapper;
 
+    @Transactional(readOnly = true)
     @Override
-    public ShoppingCartDto getShoppingCart() {
-        ShoppingCart shoppingCart = getCurrentUserCart();
+    public ShoppingCartDto getShoppingCart(Authentication authentication) {
+        String userName = authentication.getName();
+        User currentUser = userRepository.getUserByUsername(userName);
+        ShoppingCart shoppingCart = getCurrentUserCart(currentUser);
         ShoppingCartDto shoppingCartDto = shoppingCartMapper.toDto(shoppingCart);
         shoppingCartDto.setCartItems(shoppingCart.getCartItems().stream()
                 .map(cartItemMapper::toDto)
@@ -43,8 +49,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Transactional
     @Override
-    public CartItemResponseDto addCartItem(CartItemRequestDto cartItemRequestDto) {
-        ShoppingCart shoppingCart = getCurrentUserCart();
+    public CartItemResponseDto addCartItem(CartItemRequestDto cartItemRequestDto,
+                                           Authentication authentication) {
+        String userName = authentication.getName();
+        User currentUser = userRepository.getUserByUsername(userName);
+        ShoppingCart shoppingCart = getCurrentUserCart(currentUser);
         Book book = bookRepository.findById(cartItemRequestDto.bookId()).orElseThrow(
                 () -> new EntityNotFoundException(
                         "Can't find book with id=" + cartItemRequestDto.bookId()));
@@ -53,31 +62,34 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
 
+    @Transactional
     @Override
     public CartItemResponseDto update(Long id, UpdateRequestDto updateRequestDto) {
         CartItem cartItem = cartItemRepository
-                .findCartItemByIdAndShoppingCartId(id, getCurrentUserCart().getId())
+                .findCartItemById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find item with id= " + id));
         cartItem.setQuantity(updateRequestDto.getQuantity());
         cartItem.setId(id);
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         cartItemRepository.deleteById(id);
     }
 
     @Override
-    public void clear(ShoppingCart shoppingCart) {
+    public void clear(ShoppingCart shoppingCart, Authentication authentication) {
         cartItemRepository.deleteAll(shoppingCart.getCartItems());
-        getCurrentUserCart().getCartItems().clear();
+        User user = (User) authentication.getPrincipal();
+        getCurrentUserCart(user).getCartItems().clear();
     }
 
     @Override
-    public ShoppingCart getCurrentUserCart() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return shoppingCartRepository.findShoppingCartByUserId(user.getId());
+    public ShoppingCart getCurrentUserCart(User user) {
+        user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return shoppingCartRepository.getShoppingCartByUserId(user.getId());
     }
 
     @Override

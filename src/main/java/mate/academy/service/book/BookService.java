@@ -14,9 +14,9 @@ public interface BookService {
 
     List<BookDto> findAll(Pageable pageable);
 
-    void deletedById(Long id);
+    void delete(Long id);
 
-    BookDto updateById(Long id, CreateBookRequestDto requestDto);
+    BookDto update(Long id, CreateBookRequestDto requestDto);
 
     List<BookDto> search(BookSearchParameters params);
 

@@ -17,13 +17,4 @@ public interface CartItemMapper {
         responseDto.setBookId(cartItem.getBook().getId());
         responseDto.setBookTitle(cartItem.getBook().getTitle());
     }
-
-    default CartItemResponseDto mapToDto(CartItem cartItem) {
-        CartItemResponseDto responseDto = new CartItemResponseDto();
-        responseDto.setId(cartItem.getId());
-        responseDto.setBookId(cartItem.getBook().getId());
-        responseDto.setBookTitle(cartItem.getBook().getTitle());
-        responseDto.setQuantity(cartItem.getQuantity());
-        return responseDto;
-    }
 }
