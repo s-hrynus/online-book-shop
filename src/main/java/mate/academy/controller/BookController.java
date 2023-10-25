@@ -30,21 +30,20 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    @Operation(summary = "Get all books", description = "Get all available books "
-            + "or you can set pageable page=?&size=? and sort=? if u need")
+    @Operation(summary = "Get all books")
     public List<BookDto> getAll(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @GetMapping(value = "/{id}")
-    @Operation(summary = "Get book by id", description = "Get book by id from DB it's present")
+    @Operation(summary = "Get book by id")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    @Operation(summary = "Create a new book", description = "Create a new book in DB")
+    @Operation(summary = "Create a new book")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
@@ -52,21 +51,21 @@ public class BookController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete book by id", description = "Delete book by id from DB")
+    @Operation(summary = "Delete book by id")
     public void delete(@PathVariable Long id) {
-        bookService.deletedById(id);
+        bookService.delete(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
-    @Operation(summary = "Update book by id", description = "Update book by id in DB")
+    @Operation(summary = "Update book by id")
     public BookDto update(@PathVariable Long id,
                           @RequestBody @Valid CreateBookRequestDto requestDto) {
-        return bookService.updateById(id, requestDto);
+        return bookService.update(id, requestDto);
     }
 
     @GetMapping("/search")
-    @Operation(summary = "Search books by criteria", description = "Search books by criteria in DB")
+    @Operation(summary = "Search books by criteria")
     public List<BookDto> search(BookSearchParameters searchParameters) {
         return bookService.search(searchParameters);
     }

@@ -7,5 +7,6 @@ public record BookSearchParameters(String[] titles,
                                    String[] isbns,
                                    BigDecimal[] prices,
                                    String[] descriptions,
-                                   String[] coverImages) {
+                                   String[] coverImages
+) {
 }

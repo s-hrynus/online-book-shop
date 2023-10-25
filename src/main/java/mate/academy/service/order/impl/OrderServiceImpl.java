@@ -14,6 +14,7 @@ import mate.academy.dto.orderitem.OrderItemDto;
 import mate.academy.exception.EntityNotFoundException;
 import mate.academy.mapper.OrderItemMapper;
 import mate.academy.mapper.OrderMapper;
+import mate.academy.mapper.ShoppingCartMapper;
 import mate.academy.model.CartItem;
 import mate.academy.model.Order;
 import mate.academy.model.ShoppingCart;
@@ -23,6 +24,8 @@ import mate.academy.repository.orderitem.OrderItemRepository;
 import mate.academy.service.order.OrderService;
 import mate.academy.service.shoppingcart.ShoppingCartService;
 import mate.academy.service.user.UserService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +36,13 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final UserService userService;
     private final ShoppingCartService shoppingCartService;
+    private final ShoppingCartMapper shoppingCartMapper;
     private final OrderItemMapper orderItemMapper;
     private final OrderMapper orderMapper;
 
     @Transactional
     @Override
-    public List<OrderDto> getAllOrder() {
+    public List<OrderDto> findAllOrders(Pageable pageable) {
         User user = userService.getAuthenticatedUser();
         List<Order> orders = orderRepository.getOrderByUserId(user.getId());
         for (Order order : orders) {
@@ -51,10 +55,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderDto addAddress(OrderAddressDto orderAddressDto) {
-        Order order = createOrder(orderAddressDto);
+    public OrderDto addAddress(OrderAddressDto orderAddressDto, Authentication authentication) {
+        Order order = createOrder(orderAddressDto, authentication);
         order.setShippingAddress(orderAddressDto.getShippingAddress());
-        return orderMapper.toDto(order);
+        shoppingCartService.clear(
+                shoppingCartMapper.toEntity(
+                        shoppingCartService.getShoppingCart(authentication)), authentication);
+        return initializeOrderItems(orderRepository.save(order));
     }
 
     @Transactional
@@ -68,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public Set<OrderItemDto> getAllOrderItems(Long orderId) {
+    public Set<OrderItemDto> findAllOrderItems(Long orderId) {
         return getAllOrderItemByOrderId(orderId)
                 .collect(Collectors.toSet());
     }
@@ -83,9 +90,10 @@ public class OrderServiceImpl implements OrderService {
                                 + itemId));
     }
 
-    private Order createOrder(OrderAddressDto requestAddressDto) {
+    private Order createOrder(OrderAddressDto requestAddressDto, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
         Order order = new Order();
-        ShoppingCart shoppingCart = shoppingCartService.getCurrentUserCart();
+        ShoppingCart shoppingCart = shoppingCartService.getCurrentUserCart(user);
         order.setOrderDate(LocalDateTime.now());
         order.setStatus(Order.Status.PENDING);
         order.setShippingAddress(requestAddressDto.getShippingAddress());
@@ -96,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow());
         Order savedOrder = orderRepository.save(order);
         order.setOrderItems(shoppingCart.getCartItems().stream()
-                .map(i -> orderItemMapper.cartItemToOrderItem(i, savedOrder))
+                .map(item -> orderItemMapper.cartItemToOrderItem(item, savedOrder))
                 .map(orderItemRepository::save)
                 .collect(Collectors.toSet()));
         return savedOrder;

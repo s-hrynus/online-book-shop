@@ -32,46 +32,43 @@ public class CategoryController {
     private final BookService bookService;
 
     @GetMapping
-    @Operation(summary = "Get all categories", description = "Get all available categories")
+    @Operation(summary = "Get all categories")
     public List<CategoryDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
     @GetMapping(value = "/{id}")
-    @Operation(summary = "Get category by id", description = "Get category by id from DB")
+    @Operation(summary = "Get category by id")
     public CategoryDto getCategoryById(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
     @GetMapping("/{id}/books")
-    @Operation(summary = "Get list of books by category",
-            description = "Get all books by category from DB")
+    @Operation(summary = "Get list of books by category id")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id) {
         return bookService.findAllByCategoryId(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    @Operation(summary = "Create a new category", description = "Create a new category in DB")
+    @Operation(summary = "Create a new category")
     public CategoryDto createCategory(@RequestBody @Valid CategoryRequestDto requestDto) {
         return categoryService.save(requestDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(value = "/{id}")
-    @Operation(summary = "Update category by id",
-            description = "Update category if it's present in DB")
+    @Operation(summary = "Update category by id")
     public CategoryDto updateCategory(@PathVariable Long id,
                                       @RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.updateById(id, categoryDto);
+        return categoryService.update(id, categoryDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete category by id",
-            description = "Delete category by id if it's present in DB")
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete category by id")
     public void deleteCategory(@PathVariable Long id) {
-        categoryService.deleteById(id);
+        categoryService.delete(id);
     }
 }

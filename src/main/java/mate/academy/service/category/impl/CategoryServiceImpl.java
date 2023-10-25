@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto updateById(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CategoryDto categoryDto) {
         if (categoryRepository.findById(id).isPresent()) {
             Category category = categoryMapper.toEntity(categoryDto);
             category.setId(id);
@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         categoryRepository.deleteById(id);
     }
 }
