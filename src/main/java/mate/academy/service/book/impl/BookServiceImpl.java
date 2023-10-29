@@ -1,7 +1,6 @@
 package mate.academy.service.book.impl;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.dto.book.BookDto;
 import mate.academy.dto.book.BookDtoWithoutCategoryIds;
@@ -37,7 +36,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("Can't find book with id " + id));
+                () -> new EntityNotFoundException("Can't find book with id " + id));
         return bookMapper.toDto(book);
     }
 
