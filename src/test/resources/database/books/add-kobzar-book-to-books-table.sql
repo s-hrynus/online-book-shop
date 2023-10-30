@@ -1,0 +1,2 @@
+insert into books (id, title, author, isbn, price, description, cover_image, is_deleted)
+values (1, 'Kobzar', 'Taras Shevchenko', '978-966-10-0135-9', 299, 'This book include all best works wrote by T.Shevchenko', 'image_1', false);

@@ -31,18 +31,21 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final BookService bookService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     @Operation(summary = "Get all categories")
     public List<CategoryDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping(value = "/{id}")
     @Operation(summary = "Get category by id")
     public CategoryDto getCategoryById(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}/books")
     @Operation(summary = "Get list of books by category id")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id) {
