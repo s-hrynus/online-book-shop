@@ -1,5 +1,9 @@
 package mate.academy.service;
 
+import static mate.academy.util.TestDataUtil.getDefaultBook;
+import static mate.academy.util.TestDataUtil.getDefaultBookDto;
+import static mate.academy.util.TestDataUtil.getDefaultBookDtoWithoutCategoryIds;
+import static mate.academy.util.TestDataUtil.getDefaultBookRequestDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +26,6 @@ import mate.academy.model.Book;
 import mate.academy.repository.book.BookRepository;
 import mate.academy.repository.book.BookSpecificationBuilder;
 import mate.academy.service.book.impl.BookServiceImpl;
-import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,10 +58,10 @@ class BookServiceImplUnitTest {
 
     @BeforeAll
     public static void setUp() {
-        requestDto = TestDataUtil.getDefaultBookRequestDto();
-        book = TestDataUtil.getDefaultBook();
-        bookDto = TestDataUtil.getDefaultBookDto();
-        bookDtoWithoutCategoryIds = TestDataUtil.getDefaultBookDtoWithoutCategoryIds();
+        requestDto = getDefaultBookRequestDto();
+        book = getDefaultBook();
+        bookDto = getDefaultBookDto();
+        bookDtoWithoutCategoryIds = getDefaultBookDtoWithoutCategoryIds();
     }
     
     @Test

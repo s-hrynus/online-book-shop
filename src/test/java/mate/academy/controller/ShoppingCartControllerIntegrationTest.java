@@ -1,5 +1,14 @@
 package mate.academy.controller;
 
+import static mate.academy.util.TestDataUtil.getBookInvalidRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultBook;
+import static mate.academy.util.TestDataUtil.getDefaultCartItem;
+import static mate.academy.util.TestDataUtil.getDefaultCartItemRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultCartItemResponseDto;
+import static mate.academy.util.TestDataUtil.getDefaultShoppingCart;
+import static mate.academy.util.TestDataUtil.getDefaultShoppingCartDto;
+import static mate.academy.util.TestDataUtil.getDefaultUpdateRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultUser;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -17,7 +26,6 @@ import mate.academy.model.Book;
 import mate.academy.model.CartItem;
 import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
-import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,15 +65,15 @@ class ShoppingCartControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        user = TestDataUtil.getDefaultUser();
-        book = TestDataUtil.getDefaultBook();
-        cartItem = TestDataUtil.getDefaultCartItem();
-        cartItemRequestDto = TestDataUtil.getDefaultCartItemRequestDto();
-        cartItemResponseDto = TestDataUtil.getDefaultCartItemResponseDto();
-        invalidRequestDto = TestDataUtil.getBookInvalidRequestDto();
-        updateRequestDto = TestDataUtil.getDefaultUpdateRequestDto();
-        shoppingCart = TestDataUtil.getDefaultShoppingCart();
-        shoppingCartDto = TestDataUtil.getDefaultShoppingCartDto();
+        user = getDefaultUser();
+        book = getDefaultBook();
+        cartItem = getDefaultCartItem();
+        cartItemRequestDto = getDefaultCartItemRequestDto();
+        cartItemResponseDto = getDefaultCartItemResponseDto();
+        invalidRequestDto = getBookInvalidRequestDto();
+        updateRequestDto = getDefaultUpdateRequestDto();
+        shoppingCart = getDefaultShoppingCart();
+        shoppingCartDto = getDefaultShoppingCartDto();
     }
 
     @Test

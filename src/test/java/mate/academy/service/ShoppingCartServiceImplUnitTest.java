@@ -1,5 +1,13 @@
 package mate.academy.service;
 
+import static mate.academy.util.TestDataUtil.getAuthentication;
+import static mate.academy.util.TestDataUtil.getDefaultBook;
+import static mate.academy.util.TestDataUtil.getDefaultCartItem;
+import static mate.academy.util.TestDataUtil.getDefaultCartItemRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultCartItemResponseDto;
+import static mate.academy.util.TestDataUtil.getDefaultShoppingCart;
+import static mate.academy.util.TestDataUtil.getDefaultShoppingCartDto;
+import static mate.academy.util.TestDataUtil.getDefaultUser;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,7 +33,6 @@ import mate.academy.repository.cartitem.CartItemRepository;
 import mate.academy.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.repository.user.UserRepository;
 import mate.academy.service.shoppingcart.impl.ShoppingCartServiceImpl;
-import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,14 +71,14 @@ class ShoppingCartServiceImplUnitTest {
 
     @BeforeEach
     void setUp() {
-        user = TestDataUtil.getDefaultUser();
-        book = TestDataUtil.getDefaultBook();
-        cartItem = TestDataUtil.getDefaultCartItem();
-        cartItemRequestDto = TestDataUtil.getDefaultCartItemRequestDto();
-        cartItemResponseDto = TestDataUtil.getDefaultCartItemResponseDto();
-        shoppingCart = TestDataUtil.getDefaultShoppingCart();
-        shoppingCartDto = TestDataUtil.getDefaultShoppingCartDto();
-        authentication = TestDataUtil.getAuthentication();
+        user = getDefaultUser();
+        book = getDefaultBook();
+        cartItem = getDefaultCartItem();
+        cartItemRequestDto = getDefaultCartItemRequestDto();
+        cartItemResponseDto = getDefaultCartItemResponseDto();
+        shoppingCart = getDefaultShoppingCart();
+        shoppingCartDto = getDefaultShoppingCartDto();
+        authentication = getAuthentication();
     }
 
     @Test

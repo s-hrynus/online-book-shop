@@ -1,5 +1,8 @@
 package mate.academy.service;
 
+import static mate.academy.util.TestDataUtil.getDefaultCategory;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryDto;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryRequestDto;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,7 +19,6 @@ import mate.academy.mapper.CategoryMapper;
 import mate.academy.model.Category;
 import mate.academy.repository.category.CategoryRepository;
 import mate.academy.service.category.impl.CategoryServiceImpl;
-import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,9 +47,9 @@ class CategoryServiceImplUnitTest {
 
     @BeforeEach
     void setUp() {
-        categoryRequestDto = TestDataUtil.getDefaultCategoryRequestDto();
-        category = TestDataUtil.getDefaultCategory();
-        categoryDto = TestDataUtil.getDefaultCategoryDto();
+        categoryRequestDto = getDefaultCategoryRequestDto();
+        category = getDefaultCategory();
+        categoryDto = getDefaultCategoryDto();
     }
 
     @Test

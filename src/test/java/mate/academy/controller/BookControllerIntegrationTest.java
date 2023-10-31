@@ -1,5 +1,9 @@
 package mate.academy.controller;
 
+import static mate.academy.util.TestDataUtil.getDefaultBook;
+import static mate.academy.util.TestDataUtil.getDefaultBookDto;
+import static mate.academy.util.TestDataUtil.getDefaultBookInvalidRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultBookRequestDto;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -14,7 +18,6 @@ import java.util.List;
 import mate.academy.dto.book.BookDto;
 import mate.academy.dto.book.CreateBookRequestDto;
 import mate.academy.model.Book;
-import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,10 +52,10 @@ class BookControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        book = TestDataUtil.getDefaultBook();
-        bookDto = TestDataUtil.getDefaultBookDto();
-        bookRequestDto = TestDataUtil.getDefaultBookRequestDto();
-        bookInvalidRequestDto = TestDataUtil.getDefaultBookInvalidRequestDto();
+        book = getDefaultBook();
+        bookDto = getDefaultBookDto();
+        bookRequestDto = getDefaultBookRequestDto();
+        bookInvalidRequestDto = getDefaultBookInvalidRequestDto();
     }
 
     @Test

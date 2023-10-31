@@ -1,5 +1,10 @@
 package mate.academy.controller;
 
+import static mate.academy.util.TestDataUtil.getDefaultBookDtoWithoutCategoryIds;
+import static mate.academy.util.TestDataUtil.getDefaultCategory;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryDto;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultInvalidCategoryRequestDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -15,7 +20,6 @@ import mate.academy.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.dto.category.CategoryDto;
 import mate.academy.dto.category.CategoryRequestDto;
 import mate.academy.model.Category;
-import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,11 +55,11 @@ class CategoryControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        requestDto = TestDataUtil.getDefaultCategoryRequestDto();
-        invalidCategoryRequestDto = TestDataUtil.getDefaultInvalidCategoryRequestDto();
-        category = TestDataUtil.getDefaultCategory();
-        categoryDto = TestDataUtil.getDefaultCategoryDto();
-        bookDtoWithoutCategoryIds = TestDataUtil.getDefaultBookDtoWithoutCategoryIds();
+        requestDto = getDefaultCategoryRequestDto();
+        invalidCategoryRequestDto = getDefaultInvalidCategoryRequestDto();
+        category = getDefaultCategory();
+        categoryDto = getDefaultCategoryDto();
+        bookDtoWithoutCategoryIds = getDefaultBookDtoWithoutCategoryIds();
     }
 
     @Test
