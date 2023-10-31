@@ -20,7 +20,6 @@ import mate.academy.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.repository.user.UserRepository;
 import mate.academy.service.shoppingcart.ShoppingCartService;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,8 +87,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCart getCurrentUserCart(User user) {
-        user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return shoppingCartRepository.getShoppingCartByUserId(user.getId());
+        ShoppingCart shoppingCart = shoppingCartRepository.getShoppingCartByUserId(user.getId());
+        shoppingCart.setCartItems(
+                cartItemRepository.getCartItemsByShoppingCartId(shoppingCart.getId()));
+        return shoppingCart;
     }
 
     @Override

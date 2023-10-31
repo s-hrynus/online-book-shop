@@ -1,0 +1,1 @@
+insert into users (id, email, password, first_name, last_name, shipping_address, is_deleted) values (1, 'bob@in.ua', 'qwerty', 'Bob', 'Alison', 'USA', false)
