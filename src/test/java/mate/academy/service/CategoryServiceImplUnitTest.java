@@ -16,6 +16,7 @@ import mate.academy.mapper.CategoryMapper;
 import mate.academy.model.Category;
 import mate.academy.repository.category.CategoryRepository;
 import mate.academy.service.category.impl.CategoryServiceImpl;
+import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class CategoryServiceImplUnitTest {
     private static final long INVALID_ID = -1L;
     private static Category category;
     private static CategoryDto categoryDto;
-    private static CategoryRequestDto requestDto;
+    private static CategoryRequestDto categoryRequestDto;
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
@@ -44,29 +45,19 @@ class CategoryServiceImplUnitTest {
 
     @BeforeEach
     void setUp() {
-        requestDto = new CategoryRequestDto();
-        requestDto.setName("Poem");
-        requestDto.setDescription("smth");
-
-        category = new Category();
-        category.setId(VALID_ID);
-        category.setDescription(requestDto.getDescription());
-        category.setName(requestDto.getName());
-
-        categoryDto = new CategoryDto();
-        categoryDto.setId(category.getId());
-        categoryDto.setDescription(category.getDescription());
-        categoryDto.setName(category.getName());
+        categoryRequestDto = TestDataUtil.getDefaultCategoryRequestDto();
+        category = TestDataUtil.getDefaultCategory();
+        categoryDto = TestDataUtil.getDefaultCategoryDto();
     }
 
     @Test
     @DisplayName("Verify save() method works")
     void save_ValidCategoryRequestDto_ShouldReturnCategoryDto() {
-        when(categoryMapper.requestToEntity(requestDto)).thenReturn(category);
+        when(categoryMapper.requestToEntity(categoryRequestDto)).thenReturn(category);
         when(categoryRepository.save(category)).thenReturn(category);
         when(categoryMapper.toDto(category)).thenReturn(categoryDto);
 
-        CategoryDto actual = categoryService.save(requestDto);
+        CategoryDto actual = categoryService.save(categoryRequestDto);
         assertNotNull(actual);
         assertEquals(categoryDto, actual);
     }

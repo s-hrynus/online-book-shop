@@ -9,8 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import java.util.HashSet;
 import mate.academy.dto.cartitem.CartItemRequestDto;
 import mate.academy.dto.cartitem.CartItemResponseDto;
 import mate.academy.dto.cartitem.UpdateRequestDto;
@@ -19,6 +17,7 @@ import mate.academy.model.Book;
 import mate.academy.model.CartItem;
 import mate.academy.model.ShoppingCart;
 import mate.academy.model.User;
+import mate.academy.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,6 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 class ShoppingCartControllerIntegrationTest {
     private static final long VALID_ID = 1L;
     private static final long INVALID_ID = -1L;
-    private static final int DEFAULT_QUANTITY = 100;
     private static final String USER = "bob@in.ua";
     private static User user;
     private static Book book;
@@ -59,53 +57,15 @@ class ShoppingCartControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        user = new User();
-        user.setId(VALID_ID);
-        user.setEmail(USER);
-        user.setPassword("qwerty");
-        user.setFirstName("Bob");
-        user.setLastName("Alison");
-        user.setShippingAddress("USA");
-        user.setRoles(new HashSet<>());
-
-        book = new Book();
-        book.setId(VALID_ID);
-        book.setTitle("Kobzar");
-        book.setAuthor("Taras Shevchenko");
-        book.setIsbn("978-966-10-0135-9");
-        book.setPrice(new BigDecimal(299));
-        book.setDescription("This book include all best works wrote by T.Shevchenko");
-        book.setCoverImage("image_1");
-        book.setCategories(new HashSet<>());
-
-        shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user);
-        shoppingCart.setId(VALID_ID);
-        shoppingCart.setCartItems(new HashSet<>());
-
-        shoppingCartDto = new ShoppingCartDto();
-        shoppingCartDto.setId(VALID_ID);
-        shoppingCartDto.setUserId(VALID_ID);
-        shoppingCartDto.setCartItems(new HashSet<>());
-
-        cartItem = new CartItem();
-        cartItem.setId(VALID_ID);
-        cartItem.setShoppingCart(shoppingCart);
-        cartItem.setBook(book);
-        cartItem.setQuantity(DEFAULT_QUANTITY);
-
-        updateRequestDto = new UpdateRequestDto();
-        updateRequestDto.setQuantity(DEFAULT_QUANTITY);
-
-        cartItemRequestDto = new CartItemRequestDto(book.getId(),DEFAULT_QUANTITY);
-
-        invalidRequestDto = new CartItemRequestDto(INVALID_ID, DEFAULT_QUANTITY);
-
-        cartItemResponseDto = new CartItemResponseDto();
-        cartItemResponseDto.setId(cartItem.getId());
-        cartItemResponseDto.setBookId(cartItem.getBook().getId());
-        cartItemResponseDto.setQuantity(cartItem.getQuantity());
-        cartItemResponseDto.setBookTitle(book.getTitle());
+        user = TestDataUtil.getDefaultUser();
+        book = TestDataUtil.getDefaultBook();
+        cartItem = TestDataUtil.getDefaultCartItem();
+        cartItemRequestDto = TestDataUtil.getDefaultCartItemRequestDto();
+        cartItemResponseDto = TestDataUtil.getDefaultCartItemResponseDto();
+        invalidRequestDto = TestDataUtil.getBookInvalidRequestDto();
+        updateRequestDto = TestDataUtil.getDefaultUpdateRequestDto();
+        shoppingCart = TestDataUtil.getDefaultShoppingCart();
+        shoppingCartDto = TestDataUtil.getDefaultShoppingCartDto();
     }
 
     @Test
