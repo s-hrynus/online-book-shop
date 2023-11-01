@@ -1,5 +1,10 @@
 package mate.academy.controller;
 
+import static mate.academy.util.TestDataUtil.getDefaultBookDtoWithoutCategoryIds;
+import static mate.academy.util.TestDataUtil.getDefaultCategory;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryDto;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultInvalidCategoryRequestDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -10,7 +15,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
 import java.util.List;
 import mate.academy.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.dto.category.CategoryDto;
@@ -36,7 +40,7 @@ class CategoryControllerIntegrationTest {
     private static final long INVALID_ID = -1L;
     private static Category category;
     private static CategoryRequestDto requestDto;
-    private static CategoryRequestDto invalidRequestDto;
+    private static CategoryRequestDto invalidCategoryRequestDto;
     private static CategoryDto categoryDto;
     private static BookDtoWithoutCategoryIds bookDtoWithoutCategoryIds;
     
@@ -50,33 +54,12 @@ class CategoryControllerIntegrationTest {
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
-        
-        requestDto = new CategoryRequestDto();
-        requestDto.setName("Poem");
-        requestDto.setDescription("smth");
-        
-        invalidRequestDto = new CategoryRequestDto();
-        invalidRequestDto.setName("");
-        invalidRequestDto.setDescription("");
 
-        category = new Category();
-        category.setId(VALID_ID);
-        category.setDescription(requestDto.getDescription());
-        category.setName(requestDto.getName());
-
-        categoryDto = new CategoryDto();
-        categoryDto.setId(category.getId());
-        categoryDto.setDescription(category.getDescription());
-        categoryDto.setName(category.getName());
-
-        bookDtoWithoutCategoryIds = new BookDtoWithoutCategoryIds();
-        bookDtoWithoutCategoryIds.setTitle("Kobzar");
-        bookDtoWithoutCategoryIds.setAuthor("Taras Shevchenko");
-        bookDtoWithoutCategoryIds.setIsbn("978-966-10-0135-9");
-        bookDtoWithoutCategoryIds.setPrice(new BigDecimal(299));
-        bookDtoWithoutCategoryIds.setDescription("This book include all "
-                + "best works wrote by T.Shevchenko");
-        bookDtoWithoutCategoryIds.setCoverImage("image_1");
+        requestDto = getDefaultCategoryRequestDto();
+        invalidCategoryRequestDto = getDefaultInvalidCategoryRequestDto();
+        category = getDefaultCategory();
+        categoryDto = getDefaultCategoryDto();
+        bookDtoWithoutCategoryIds = getDefaultBookDtoWithoutCategoryIds();
     }
 
     @Test
@@ -103,7 +86,7 @@ class CategoryControllerIntegrationTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createCategory_NotValidRequestDto_ShouldThrowException() throws Exception {
         mockMvc.perform(post("/categories")
-                .content(objectMapper.writeValueAsString(invalidRequestDto))
+                .content(objectMapper.writeValueAsString(invalidCategoryRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -181,7 +164,7 @@ class CategoryControllerIntegrationTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void update_NotValidRequestDto_ShouldThrowException() throws Exception {
         mockMvc.perform(put("/categories/" + INVALID_ID)
-                .content(objectMapper.writeValueAsString(invalidRequestDto))
+                .content(objectMapper.writeValueAsString(invalidCategoryRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }

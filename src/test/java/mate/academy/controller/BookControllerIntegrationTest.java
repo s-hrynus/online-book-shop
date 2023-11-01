@@ -1,5 +1,9 @@
 package mate.academy.controller;
 
+import static mate.academy.util.TestDataUtil.getDefaultBook;
+import static mate.academy.util.TestDataUtil.getDefaultBookDto;
+import static mate.academy.util.TestDataUtil.getDefaultBookInvalidRequestDto;
+import static mate.academy.util.TestDataUtil.getDefaultBookRequestDto;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -10,8 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
 import mate.academy.dto.book.BookDto;
 import mate.academy.dto.book.CreateBookRequestDto;
@@ -36,8 +38,8 @@ class BookControllerIntegrationTest {
     private static final long INVALID_ID = -1L;
     private static Book book;
     private static BookDto bookDto;
-    private static CreateBookRequestDto requestDto;
-    private static CreateBookRequestDto invalidRequestDto;
+    private static CreateBookRequestDto bookRequestDto;
+    private static CreateBookRequestDto bookInvalidRequestDto;
 
     private static MockMvc mockMvc;
     @Autowired
@@ -50,41 +52,10 @@ class BookControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        requestDto = new CreateBookRequestDto()
-                .setTitle("Kobzar")
-                .setAuthor("Taras Shevchenko")
-                .setIsbn("978-966-10-0135-9")
-                .setPrice(new BigDecimal(299))
-                .setDescription("This book include all best works wrote by T.Shevchenko")
-                .setCoverImage("image_1")
-                .setCategoriesIds(new HashSet<>());
-
-        invalidRequestDto = new CreateBookRequestDto()
-                .setTitle("")
-                .setAuthor("")
-                .setIsbn("")
-                .setPrice(new BigDecimal(299))
-                .setDescription("")
-                .setCoverImage("")
-                .setCategoriesIds(new HashSet<>());
-
-        book = new Book();
-        book.setId(VALID_ID);
-        book.setTitle(requestDto.getTitle());
-        book.setAuthor(requestDto.getAuthor());
-        book.setIsbn(requestDto.getIsbn());
-        book.setPrice(requestDto.getPrice());
-        book.setDescription(requestDto.getDescription());
-        book.setCoverImage(requestDto.getCoverImage());
-
-        bookDto = new BookDto()
-                .setId(book.getId())
-                .setTitle(book.getTitle())
-                .setAuthor(book.getAuthor())
-                .setIsbn(book.getIsbn())
-                .setPrice(book.getPrice())
-                .setDescription(book.getDescription())
-                .setCoverImage(book.getCoverImage());
+        book = getDefaultBook();
+        bookDto = getDefaultBookDto();
+        bookRequestDto = getDefaultBookRequestDto();
+        bookInvalidRequestDto = getDefaultBookInvalidRequestDto();
     }
 
     @Test
@@ -95,7 +66,7 @@ class BookControllerIntegrationTest {
     void createBook_ValidRequestDto_SuccessCreatingANewBook() throws Exception {
 
         MvcResult result = mockMvc.perform(post("/books")
-                .content(objectMapper.writeValueAsString(requestDto))
+                .content(objectMapper.writeValueAsString(bookRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
@@ -113,7 +84,7 @@ class BookControllerIntegrationTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createBook_NotValidBookRequestDto_ShouldThrowException() throws Exception {
         mockMvc.perform(post("/books")
-                .content(objectMapper.writeValueAsString(invalidRequestDto))
+                .content(objectMapper.writeValueAsString(bookInvalidRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -186,7 +157,7 @@ class BookControllerIntegrationTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void update_ValidRequestDto_SuccessUpdateBookById() throws Exception {
         MvcResult result = mockMvc.perform(put("/books/" + VALID_ID)
-                        .content(objectMapper.writeValueAsString(requestDto))
+                        .content(objectMapper.writeValueAsString(bookRequestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -206,7 +177,7 @@ class BookControllerIntegrationTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void update_NotValidRequestDto_ShouldThrowException() throws Exception {
         mockMvc.perform(put("/books/" + VALID_ID)
-                .content(objectMapper.writeValueAsString(invalidRequestDto))
+                .content(objectMapper.writeValueAsString(bookInvalidRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }

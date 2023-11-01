@@ -1,5 +1,9 @@
 package mate.academy.service;
 
+import static mate.academy.util.TestDataUtil.getDefaultBook;
+import static mate.academy.util.TestDataUtil.getDefaultBookDto;
+import static mate.academy.util.TestDataUtil.getDefaultBookDtoWithoutCategoryIds;
+import static mate.academy.util.TestDataUtil.getDefaultBookRequestDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,11 +13,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import mate.academy.dto.book.BookDto;
 import mate.academy.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.dto.book.BookSearchParameters;
@@ -39,7 +41,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplUnitTest {
-    private static final long VALID_ID = 1L;
     private static final long INVALID_ID = -1L;
     private static CreateBookRequestDto requestDto;
     private static Book book;
@@ -57,41 +58,10 @@ class BookServiceImplUnitTest {
 
     @BeforeAll
     public static void setUp() {
-        requestDto = new CreateBookRequestDto();
-        requestDto.setTitle("Kobzar");
-        requestDto.setAuthor("Taras Shevchenko");
-        requestDto.setIsbn("978-966-10-0135-9");
-        requestDto.setPrice(new BigDecimal(299));
-        requestDto.setDescription("This book include all best works wrote by T.Shevchenko");
-        requestDto.setCoverImage("image_1");
-        requestDto.setCategoriesIds(Set.of(VALID_ID));
-
-        book = new Book();
-        book.setId(VALID_ID);
-        book.setTitle(requestDto.getTitle());
-        book.setAuthor(requestDto.getAuthor());
-        book.setIsbn(requestDto.getIsbn());
-        book.setPrice(requestDto.getPrice());
-        book.setDescription(requestDto.getDescription());
-        book.setCoverImage(requestDto.getCoverImage());
-
-        bookDto = new BookDto();
-        bookDto.setId(book.getId());
-        bookDto.setTitle(book.getTitle());
-        bookDto.setAuthor(book.getAuthor());
-        bookDto.setIsbn(book.getIsbn());
-        bookDto.setPrice(book.getPrice());
-        bookDto.setDescription(book.getDescription());
-        bookDto.setCoverImage(book.getCoverImage());
-
-        bookDtoWithoutCategoryIds = new BookDtoWithoutCategoryIds();
-        bookDtoWithoutCategoryIds.setId(book.getId());
-        bookDtoWithoutCategoryIds.setAuthor(book.getAuthor());
-        bookDtoWithoutCategoryIds.setTitle(book.getTitle());
-        bookDtoWithoutCategoryIds.setIsbn(book.getIsbn());
-        bookDtoWithoutCategoryIds.setPrice(book.getPrice());
-        bookDtoWithoutCategoryIds.setDescription(book.getDescription());
-        bookDtoWithoutCategoryIds.setCoverImage(book.getCoverImage());
+        requestDto = getDefaultBookRequestDto();
+        book = getDefaultBook();
+        bookDto = getDefaultBookDto();
+        bookDtoWithoutCategoryIds = getDefaultBookDtoWithoutCategoryIds();
     }
     
     @Test

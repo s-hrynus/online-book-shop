@@ -1,5 +1,8 @@
 package mate.academy.service;
 
+import static mate.academy.util.TestDataUtil.getDefaultCategory;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryDto;
+import static mate.academy.util.TestDataUtil.getDefaultCategoryRequestDto;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,7 +37,7 @@ class CategoryServiceImplUnitTest {
     private static final long INVALID_ID = -1L;
     private static Category category;
     private static CategoryDto categoryDto;
-    private static CategoryRequestDto requestDto;
+    private static CategoryRequestDto categoryRequestDto;
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
@@ -44,29 +47,19 @@ class CategoryServiceImplUnitTest {
 
     @BeforeEach
     void setUp() {
-        requestDto = new CategoryRequestDto();
-        requestDto.setName("Poem");
-        requestDto.setDescription("smth");
-
-        category = new Category();
-        category.setId(VALID_ID);
-        category.setDescription(requestDto.getDescription());
-        category.setName(requestDto.getName());
-
-        categoryDto = new CategoryDto();
-        categoryDto.setId(category.getId());
-        categoryDto.setDescription(category.getDescription());
-        categoryDto.setName(category.getName());
+        categoryRequestDto = getDefaultCategoryRequestDto();
+        category = getDefaultCategory();
+        categoryDto = getDefaultCategoryDto();
     }
 
     @Test
     @DisplayName("Verify save() method works")
     void save_ValidCategoryRequestDto_ShouldReturnCategoryDto() {
-        when(categoryMapper.requestToEntity(requestDto)).thenReturn(category);
+        when(categoryMapper.requestToEntity(categoryRequestDto)).thenReturn(category);
         when(categoryRepository.save(category)).thenReturn(category);
         when(categoryMapper.toDto(category)).thenReturn(categoryDto);
 
-        CategoryDto actual = categoryService.save(requestDto);
+        CategoryDto actual = categoryService.save(categoryRequestDto);
         assertNotNull(actual);
         assertEquals(categoryDto, actual);
     }
