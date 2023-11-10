@@ -11,26 +11,36 @@ to your preferences with one click.
 
 ## Used Technologies
 This application include next list of technologies :
-- java: 17
-- tomcat: 10.1.12
-- spring boot: 3.1.5 (with jpa, web, security, swagger etc.)
-- mySQL: 8.0.35
-- liquibase: 4.20.0
+* `java:` 17
+* `tomcat:` 10.1.12
+* `spring-context:` 6.0.11
+* `spring-orm:` 6.0.11
+* `spring-webmvc:` 6.0.11
+* `spring-security-core:` 6.1.3
+* `spring-security-config:` 6.1.3
+* `spring-security-web:` 6.1.3
+* `hibernate-core:` 6.2.7.Final
+* `hibernate-validator:` 8.0.1.Final
+* `mysql-connector-java:` 8.0.35
+* `jackson-core:` 2.15.2
+* `jackson-databind:` 2.15.2
+* `jackson-datatype-jsr310:jar:` 2.15.2
+* `liquibase:` 4.20.0
 
 ## API Functionalities 
 The bookstore application controller slice follows according to REST principles. 
 The controllers below are responsible for managing HTTP requests and responses.
 #####
-- **AuthenticationController :** in this controller manages requests from users who want to register or login into our application. 
+**AuthenticationController :** in this controller manages requests from users who want to register or login into our application. 
 Here realized security part is with password encrypted for the safety user's data. Login can be done using a password and email or JWT token.
 #####
-- **BookController :** is dedicated to receiving and managing requests related to adding, updating, retrieving, and searching for books.
+**BookController :** is dedicated to receiving and managing requests related to adding, updating, retrieving, and searching for books.
 #####
-- **CategoryController :** here as a user, you can send requests for getting a book or a list of books by category. As a manager (admin) you can add, delete or update categories.
+**CategoryController :** here as a user, you can send requests for getting a book or a list of books by category. As a manager (admin) you can add, delete or update categories.
 #####
-- **ShoppingCartController :** in this controller response is for managing your shopping cart, you can add items, delete, get or update.
+**ShoppingCartController :** in this controller response is for managing your shopping cart, you can add items, delete, get or update.
 #####
-- **OrderController :** in this controller handling requests related to creating and retrieving orders, as well as updating the status of orders.
+**OrderController :** in this controller handling requests related to creating and retrieving orders, as well as updating the status of orders.
 
 ## Structure of Controllers  
 - ### AuthenticationController (/auth):
